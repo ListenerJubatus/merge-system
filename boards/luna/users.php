@@ -56,12 +56,9 @@ class FLUXBB_Converter_Module_Users extends Converter_Module_Users {
 		$insert_data['showavatars'] = $data['show_avatars'];
 		$insert_data['timezone'] = str_replace(array('.0', '.00'), array('', ''), $data['timezone']);
 
-		$insert_data['lastpost'] = (int)$data['last_post'];
-		$insert_data['icq'] = $data['icq'];
-		$insert_data['aim'] = $data['aim'];
-		$insert_data['yahoo'] = $data['yahoo'];
+		$insert_data['lastpost'] = (int)$data['last_comment'];
 		$insert_data['hideemail'] = $data['email_setting'];
-		$insert_data['allownotices'] = $data['notify_with_post'];
+		$insert_data['allownotices'] = $data['notify_with_comment'];
 		$insert_data['regip'] = my_inet_pton($data['registration_ip']);
 		$insert_data['passwordconvertsalt'] = $data['salt'];
 		$insert_data['passwordconvert'] = $data['password'];

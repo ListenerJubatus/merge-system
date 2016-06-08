@@ -41,11 +41,11 @@ class FLUXBB_Converter_Module_Usergroups extends Converter_Module_Usergroups {
 		$insert_data['import_gid'] = $data['g_id'];
 		$insert_data['title'] = $data['g_title'];
 		$insert_data['canview'] = $data['g_read_board'];
-		$insert_data['canpostthreads'] = $data['g_post_topics'];
-		$insert_data['canpostreplys'] = $data['g_post_replies'];
-		$insert_data['caneditposts'] = $data['g_edit_posts'];
-		$insert_data['candeleteposts'] = $data['g_delete_posts'];
-		$insert_data['candeletethreads'] = $data['g_delete_topics'];
+		$insert_data['canpostthreads'] = $data['g_comment_threads'];
+		$insert_data['canpostreplys'] = $data['g_comment_replies'];
+		$insert_data['caneditposts'] = $data['g_edit_comments'];
+		$insert_data['candeleteposts'] = $data['g_delete_comments'];
+		$insert_data['candeletethreads'] = $data['g_delete_threads'];
 		$insert_data['cansearch'] = $data['g_search'];
 		$insert_data['canviewmemberlist'] = $data['g_search_users'];
 

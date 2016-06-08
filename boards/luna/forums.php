@@ -42,8 +42,7 @@ class FLUXBB_Converter_Module_Forums extends Converter_Module_Forums {
 		$insert_data['description'] = encode_to_utf8($data['forum_desc'], "forums", "forums");
 		$insert_data['import_pid'] = $data['cat_id'];
 		$insert_data['disporder'] = $data['disp_position'];
-		$insert_data['linkto'] = $data['redirect_url'];
-		$insert_data['lastpost'] = (int)$data['last_post'];
+		$insert_data['lastpost'] = (int)$data['last_comment'];
 		$insert_data['parentlist'] = $data['cat_id'];
 		$insert_data['defaultsortby'] = $data['sort_by'];
 		

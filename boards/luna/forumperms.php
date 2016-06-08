@@ -39,8 +39,8 @@ class FLUXBB_Converter_Module_Forumperms extends Converter_Module_Forumperms {
 		// fluxBB values
 		$insert_data['fid'] = $this->get_import->fid_f($data['forum_id']);
 		$insert_data['gid'] = $this->board->get_gid($data['group_id']);
-		$insert_data['canpostthreads'] = $data['post_topics'];
-		$insert_data['canpostreplys'] = $data['post_replies'];
+		$insert_data['canpostthreads'] = $data['comment_threads'];
+		$insert_data['canpostreplys'] = $data['comment_replies'];
 		$insert_data['canview'] = $data['read_forum'];
 		
 		return $insert_data;

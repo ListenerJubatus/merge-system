@@ -28,7 +28,7 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 	{
 		global $import_session;
 		
-		$query = $this->old_db->simple_select("posts", "*", "", array('limit_start' => $this->trackers['start_posts'], 'limit' => $import_session['posts_per_screen']));
+		$query = $this->old_db->simple_select("comments", "*", "", array('limit_start' => $this->trackers['start_posts'], 'limit' => $import_session['posts_per_screen']));
 		while($post = $this->old_db->fetch_array($query))
 		{
 			$this->insert($post);
@@ -43,7 +43,7 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		
 		// fluxBB values
 		$insert_data['import_pid'] = $data['id'];
-		$insert_data['tid'] = $this->get_import->tid($data['topic_id']);
+		$insert_data['tid'] = $this->get_import->tid($data['thread_id']);
 
 		// Find if this is the first post in thread
 		$query = $db->simple_select("threads", "*", "tid='{$insert_data['tid']}'");
@@ -52,7 +52,7 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		$db->free_result($query);
 
 		// Make the replyto the first post of thread unless it is the first post
-		if($first_post == $data['post_id'])
+		if($first_post == $data['thread_id'])
 		{
 			$insert_data['replyto'] = 0;
 		}
@@ -61,18 +61,18 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 			$insert_data['replyto'] = $first_post;
 		}
 		
-		$insert_data['subject'] = encode_to_utf8($thread['subject'], "topics", "posts");
+		$insert_data['subject'] = encode_to_utf8($thread['subject'], "threads", "comment");
 		
 		// Check usernames for guests
-		$data['username'] = $this->get_import->username($data['poster_id'], $data['poster']);
+		$data['username'] = $this->get_import->username($data['commenter_id'], $data['commenter']);
 
 		$insert_data['fid'] = $thread['fid'];
-		$insert_data['uid'] = $this->get_import->uid($data['poster_id']);
-		$insert_data['import_uid'] = $data['poster_id'];
-		$insert_data['username'] = $data['poster'];
-		$insert_data['dateline'] = $data['posted'];
-		$insert_data['message'] = encode_to_utf8($this->bbcode_parser->convert($data['message']), "posts", "posts");
-		$insert_data['ipaddress'] = my_inet_pton($data['poster_ip']);
+		$insert_data['uid'] = $this->get_import->uid($data['commenter_id']);
+		$insert_data['import_uid'] = $data['commenter_id'];
+		$insert_data['username'] = $data['commenter'];
+		$insert_data['dateline'] = $data['commented'];
+		$insert_data['message'] = encode_to_utf8($this->bbcode_parser->convert($data['comment']), "comments", "comments");
+		$insert_data['ipaddress'] = my_inet_pton($data['commenter_ip']);
 		$insert_data['smilieoff'] = $data['hide_smilies'];
 		if(!empty($data['edited']))
 		{
@@ -107,7 +107,7 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		// Get number of posts
 		if(!isset($import_session['total_posts']))
 		{
-			$query = $this->old_db->simple_select("posts", "COUNT(*) as count");
+			$query = $this->old_db->simple_select("comments", "COUNT(*) as count");
 			$import_session['total_posts'] = $this->old_db->fetch_field($query, 'count');
 			$this->old_db->free_result($query);
 		}

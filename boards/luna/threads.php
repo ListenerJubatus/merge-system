@@ -26,7 +26,7 @@ class FLUXBB_Converter_Module_Threads extends Converter_Module_Threads {
 	{
 		global $import_session;
 		
-		$query = $this->old_db->simple_select("topics", "*", "", array('limit_start' => $this->trackers['start_threads'], 'limit' => $import_session['threads_per_screen']));
+		$query = $this->old_db->simple_select("threads", "*", "", array('limit_start' => $this->trackers['start_threads'], 'limit' => $import_session['threads_per_screen']));
 		while($thread = $this->old_db->fetch_array($query))
 		{
 			$this->insert($thread);
@@ -42,10 +42,10 @@ class FLUXBB_Converter_Module_Threads extends Converter_Module_Threads {
 		$insert_data['sticky'] = $data['sticky'];
 		$insert_data['fid'] = $this->get_import->fid_f($data['forum_id']);
 		$insert_data['import_firstpost'] = $this->get_first_post($data['id']);
-		$insert_data['dateline'] = $data['posted'];
-		$insert_data['subject'] = encode_to_utf8($data['subject'], "topics", "threads");
+		$insert_data['dateline'] = $data['commented'];
+		$insert_data['subject'] = encode_to_utf8($data['subject'], "threads", "threads");
 		
-		$user = $this->board->get_user($data['poster']);
+		$user = $this->board->get_user($data['commenter']);
 		
 		$insert_data['uid'] = $this->get_import->uid($user['id']);
 		$insert_data['import_uid'] = $user['id'];
@@ -67,7 +67,7 @@ class FLUXBB_Converter_Module_Threads extends Converter_Module_Threads {
 	 */
 	function get_first_post($tid)
 	{
-		$query = $this->old_db->simple_select("posts", "*", "topic_id = '{$tid}'", array('order_by' => 'posted', 'order_dir' => 'ASC', 'limit' => 1));
+		$query = $this->old_db->simple_select("comments", "*", "thread_id = '{$tid}'", array('order_by' => 'commented', 'order_dir' => 'ASC', 'limit' => 1));
 		return $this->old_db->fetch_field($query, "id");
 	}
 	
@@ -78,7 +78,7 @@ class FLUXBB_Converter_Module_Threads extends Converter_Module_Threads {
 		// Get number of threads
 		if(!isset($import_session['total_threads']))
 		{
-			$query = $this->old_db->simple_select("topics", "COUNT(*) as count");
+			$query = $this->old_db->simple_select("threads", "COUNT(*) as count");
 			$import_session['total_threads'] = $this->old_db->fetch_field($query, 'count');
 			$this->old_db->free_result($query);
 		}
