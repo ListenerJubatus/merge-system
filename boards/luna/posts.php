@@ -21,7 +21,7 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		'friendly_name' => 'posts',
 		'progress_column' => 'id',
 		'default_per_screen' => 1000,
-		'check_table_type' => 'posts',
+		'check_table_type' => 'comments',
 	);
 
 	function import()
@@ -52,7 +52,7 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		$db->free_result($query);
 
 		// Make the replyto the first post of thread unless it is the first post
-		if($first_post == $data['thread_id'])
+		if($first_post == $data['post_id'])
 		{
 			$insert_data['replyto'] = 0;
 		}
@@ -60,8 +60,6 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		{
 			$insert_data['replyto'] = $first_post;
 		}
-		
-		$insert_data['subject'] = encode_to_utf8($thread['subject'], "threads", "comment");
 		
 		// Check usernames for guests
 		$data['username'] = $this->get_import->username($data['commenter_id'], $data['commenter']);
@@ -71,7 +69,7 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		$insert_data['import_uid'] = $data['commenter_id'];
 		$insert_data['username'] = $data['commenter'];
 		$insert_data['dateline'] = $data['commented'];
-		$insert_data['message'] = encode_to_utf8($this->bbcode_parser->convert($data['comment']), "comments", "comments");
+		$insert_data['message'] = encode_to_utf8($this->bbcode_parser->convert($data['message']), "comments", "posts");
 		$insert_data['ipaddress'] = my_inet_pton($data['commenter_ip']);
 		$insert_data['smilieoff'] = $data['hide_smilies'];
 		if(!empty($data['edited']))
@@ -115,5 +113,3 @@ class FLUXBB_Converter_Module_Posts extends Converter_Module_Posts {
 		return $import_session['total_posts'];
 	}
 }
-
-
